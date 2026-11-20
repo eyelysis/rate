@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Eyelysis Admin | لوحة التحكم بالعملاء</title>
+  <title>Eyelysis Admin Pro | لوحة التحكم المتكاملة</title>
   <script src="https://cdn.jsdelivr.net/npm/qrcode-generator@1.4.4/qrcode.min.js"></script>
   <style>
     :root {
@@ -22,75 +22,77 @@
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Tahoma, Arial, sans-serif; }
     body { background: var(--bg); color: var(--text); min-height: 100vh; }
 
-    /* شاشة الدخول */
     .login-wrap { min-height: 100vh; display: flex; align-items: center; justify-content: center; padding: 20px; }
     .login-card { background: var(--card); width: 100%; max-width: 440px; border-radius: 18px; padding: 28px 24px; box-shadow: 0 12px 32px rgba(15,23,42,0.08); border: 1px solid var(--border); }
     .brand-badge { display: inline-block; background: #eff6ff; color: var(--accent); font-size: 12px; font-weight: 700; padding: 5px 12px; border-radius: 20px; margin-bottom: 10px; }
     .login-card h1 { font-size: 22px; color: var(--primary); margin-bottom: 6px; }
     .login-card p { font-size: 13px; color: var(--muted); margin-bottom: 20px; line-height: 1.6; }
 
-    /* الهيكل الرئيسي */
     .topbar { background: var(--primary); color: #fff; padding: 14px 20px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; }
     .topbar h2 { font-size: 17px; font-weight: 800; }
     .topbar-actions { display: flex; gap: 8px; flex-wrap: wrap; }
-    .container { max-width: 1220px; margin: 20px auto; padding: 0 16px 40px; display: grid; grid-template-columns: 330px 1fr; gap: 18px; align-items: start; }
-    @media (max-width: 900px) { .container { grid-template-columns: 1fr; } }
+    .container { max-width: 1260px; margin: 20px auto; padding: 0 16px 40px; display: grid; grid-template-columns: 340px 1fr; gap: 18px; align-items: start; }
+    @media (max-width: 920px) { .container { grid-template-columns: 1fr; } }
 
     .card { background: var(--card); border-radius: 16px; border: 1px solid var(--border); box-shadow: 0 4px 16px rgba(15,23,42,0.04); padding: 18px; }
-    .card-title { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; }
+    .card-title { font-size: 16px; font-weight: 800; color: var(--primary); margin-bottom: 14px; display: flex; align-items: center; justify-content: space-between; gap: 8px; flex-wrap: wrap; }
 
-    /* قائمة العملاء */
     .search-input { width: 100%; padding: 9px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13px; margin-bottom: 12px; background: #f8fafc; }
-    .merchant-list { display: flex; flex-direction: column; gap: 8px; max-height: 620px; overflow-y: auto; }
+    .merchant-list { display: flex; flex-direction: column; gap: 8px; max-height: 760px; overflow-y: auto; }
     .merchant-item { border: 1px solid var(--border); border-radius: 12px; padding: 12px; cursor: pointer; transition: 0.15s; background: #fff; }
     .merchant-item:hover { border-color: var(--accent); background: #f8fafc; }
     .merchant-item.selected { border: 2px solid var(--accent); background: #eff6ff; }
-    .merchant-item-top { display: flex; justify-content: space-between; align-items: center; gap: 8px; margin-bottom: 4px; }
-    .merchant-name { font-size: 14px; font-weight: 700; color: var(--primary); }
-    .merchant-id { font-size: 12px; color: var(--muted); direction: ltr; display: inline-block; }
-    .pill { font-size: 11px; font-weight: 700; padding: 3px 9px; border-radius: 20px; }
+    .merchant-item-top { display: flex; justify-content: space-between; align-items: center; gap: 6px; margin-bottom: 4px; }
+    .merchant-name { font-size: 14px; font-weight: 700; color: var(--primary); display: flex; align-items: center; gap: 6px; }
+    .color-dot { width: 10px; height: 10px; border-radius: 50%; display: inline-block; flex-shrink: 0; }
+    .merchant-meta { display: flex; justify-content: space-between; align-items: center; font-size: 11.5px; color: var(--muted); margin-top: 3px; }
+    .merchant-id { direction: ltr; display: inline-block; }
+
+    .pill { font-size: 11px; font-weight: 700; padding: 3px 8px; border-radius: 20px; white-space: nowrap; }
     .pill-on { background: #dcfce7; color: #166534; }
+    .pill-warn { background: #fef3c7; color: #92400e; }
     .pill-off { background: #fee2e2; color: #991b1b; }
 
-    /* الحقول والنماذج */
     .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-    @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+    .grid-3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 12px; }
+    @media (max-width: 680px) { .grid-2, .grid-3 { grid-template-columns: 1fr; } }
+
     .field { margin-bottom: 12px; }
     .field label { display: block; font-size: 13px; font-weight: 700; color: var(--primary); margin-bottom: 5px; }
     .field small { display: block; font-size: 11px; color: var(--muted); margin-top: 3px; }
-    input[type="text"], input[type="email"], input[type="password"], input[type="url"], select, textarea {
+    input[type="text"], input[type="email"], input[type="password"], input[type="url"], input[type="number"], input[type="date"], select, textarea {
       width: 100%; padding: 10px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 13.5px; background: #f8fafc; color: var(--text); outline: none;
     }
     input:focus, select:focus, textarea:focus { border-color: var(--accent); background: #fff; }
     textarea { min-height: 78px; resize: vertical; line-height: 1.5; }
     .ltr { direction: ltr; text-align: left; }
 
-    /* مفاتيح الميزات */
+    .color-row { display: flex; gap: 8px; align-items: center; }
+    .color-row input[type="color"] { width: 46px; height: 40px; border: 1px solid var(--border); border-radius: 10px; padding: 3px; background: #fff; cursor: pointer; }
+
     .section-box { background: #f8fafc; border: 1px solid var(--border); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
     .section-box h3 { font-size: 14px; font-weight: 800; color: var(--primary); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 8px; }
-    .toggles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(190px, 1fr)); gap: 10px; }
+    .toggles-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(195px, 1fr)); gap: 10px; }
     .toggle-item { display: flex; align-items: center; gap: 8px; background: #fff; border: 1px solid var(--border); padding: 10px 12px; border-radius: 10px; cursor: pointer; font-size: 13px; font-weight: 600; }
     .toggle-item input { width: 17px; height: 17px; accent-color: var(--accent); cursor: pointer; }
 
-    /* أزرار */
     .btn { border: none; border-radius: 10px; padding: 10px 16px; font-size: 13.5px; font-weight: 700; cursor: pointer; transition: 0.15s; display: inline-flex; align-items: center; justify-content: center; gap: 6px; text-decoration: none; }
     .btn:disabled { opacity: 0.6; cursor: not-allowed; }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-primary:hover { background: var(--accent-hover); }
     .btn-success { background: var(--success); color: #fff; }
+    .btn-dark { background: var(--primary); color: #fff; }
     .btn-danger { background: #fee2e2; color: var(--danger); }
     .btn-light { background: #e2e8f0; color: var(--primary); }
     .btn-outline { background: transparent; color: #fff; border: 1px solid rgba(255,255,255,0.3); font-size: 12.5px; padding: 7px 12px; }
     .btn-sm { padding: 6px 10px; font-size: 12px; border-radius: 8px; }
     .btn-row { display: flex; gap: 8px; flex-wrap: wrap; align-items: center; }
 
-    /* صندوق الباركود */
     .qr-panel { background: #f0fdf4; border: 1px dashed var(--success); border-radius: 14px; padding: 16px; margin-top: 16px; display: flex; gap: 18px; align-items: center; flex-wrap: wrap; }
     .qr-preview { background: #fff; padding: 10px; border-radius: 12px; border: 1px solid var(--border); display: inline-flex; align-items: center; justify-content: center; }
-    .qr-info { flex: 1; min-width: 220px; }
+    .qr-info { flex: 1; min-width: 240px; }
     .qr-url { background: #fff; border: 1px solid var(--border); padding: 8px 10px; border-radius: 8px; font-size: 12.5px; direction: ltr; word-break: break-all; margin: 8px 0 12px; color: var(--primary); }
 
-    /* تنبيهات */
     .toast { position: fixed; bottom: 20px; left: 20px; background: var(--primary); color: #fff; padding: 12px 18px; border-radius: 12px; font-size: 13.5px; font-weight: 600; box-shadow: 0 10px 25px rgba(0,0,0,0.2); z-index: 999; display: none; }
     .toast.ok { background: var(--success); }
     .toast.err { background: var(--danger); }
@@ -101,25 +103,23 @@
   <!-- 1. شاشة تسجيل الدخول -->
   <div id="loginView" class="login-wrap">
     <div class="login-card">
-      <span class="brand-badge">Eyelysis V2 • لوحة الإدارة</span>
+      <span class="brand-badge">Eyelysis V2 Pro • لوحة الإدارة</span>
       <h1>تسجيل الدخول</h1>
-      <p>أدخلي رابط المحرك الخلفي (مرة واحدة فقط وسيُحفظ في متصفحكِ) وكلمة السر الخاصة بكِ لإدارة العملاء والباركودات بدون لمس أي كود.</p>
+      <p>أدخلي رابط المحرك الخلفي وكلمة السر لإدارة العملاء، الألوان، الشعارات، الاشتراكات، وبطاقات الـ QR المصممة بضغطة زر.</p>
 
       <div class="field">
         <label>رابط Google Apps Script (Web App URL)</label>
         <input type="url" id="loginWebAppUrl" class="ltr" placeholder="https://script.google.com/macros/s/.../exec">
-        <small>يُحفظ تلقائياً في هذا المتصفح ولن تحتاجي لإدخاله مجدداً.</small>
       </div>
 
       <div class="field">
         <label>الرابط الأساسي لصفحة التقييم (لتوليد الباركود)</label>
-        <input type="url" id="loginBaseRateUrl" class="ltr" placeholder="https://eyelysis.com/eyelysis-v2/">
-        <small>مثال: رابط المستودع الجديد على GitHub Pages (يُملأ تلقائياً باسم الصفحة الحالية).</small>
+        <input type="url" id="loginBaseRateUrl" class="ltr" placeholder="https://eyelysis.com/v2/">
       </div>
 
       <div class="field">
         <label>كلمة السر (Admin Password)</label>
-        <input type="password" id="loginPassword" placeholder="أدخلي كلمة السر الموجودة في Code_V2.gs">
+        <input type="password" id="loginPassword" placeholder="أدخلي كلمة السر الموجودة في Code_V2.gs" onkeydown="if(event.key==='Enter') doLogin()">
       </div>
 
       <button class="btn btn-primary" style="width:100%;padding:12px;" id="loginBtn" onclick="doLogin()">دخول إلى لوحة التحكم</button>
@@ -129,7 +129,7 @@
   <!-- 2. شاشة لوحة التحكم -->
   <div id="appView" style="display:none;">
     <div class="topbar">
-      <h2>👁️ لوحة تحكم Eyelysis — إدارة التجار والباركود</h2>
+      <h2>👁️ لوحة تحكم Eyelysis Pro — إدارة التجار والباركود</h2>
       <div class="topbar-actions">
         <a id="masterSheetLink" href="#" target="_blank" class="btn btn-outline" style="display:none;">📊 فتح الجدول الرئيسي</a>
         <button class="btn btn-outline" onclick="reloadMerchants()">🔄 تحديث القائمة</button>
@@ -148,21 +148,22 @@
         <div id="merchantList" class="merchant-list"></div>
       </div>
 
-      <!-- العمود الأيسر: نموذج إضافة / تعديل عميل + الباركود -->
+      <!-- العمود الأيسر: النموذج المتكامل -->
       <div class="card">
         <div class="card-title">
           <span id="formHeading">إضافة عميل جديد</span>
           <div class="btn-row">
-            <button class="btn btn-light btn-sm" type="button" onclick="applyPackagePreset('basic')">تطبيق الباقة الأساسية (10 د)</button>
-            <button class="btn btn-light btn-sm" type="button" onclick="applyPackagePreset('full')">تطبيق الباقة الشاملة (18 د)</button>
+            <button class="btn btn-light btn-sm" type="button" onclick="applyPackagePreset('basic')">الباقة الأساسية (10 د)</button>
+            <button class="btn btn-light btn-sm" type="button" onclick="applyPackagePreset('full')">الباقة الشاملة (18 د)</button>
           </div>
         </div>
 
+        <!-- البيانات الأساسية -->
         <div class="grid-2">
           <div class="field">
             <label>معرّف الرابط القصير (ID بالإنجليزي بدون مسافات) *</label>
             <input type="text" id="f_id" class="ltr" placeholder="مثال: jemro" oninput="refreshQrBox()">
-            <small>سيصبح الرابط: <span id="previewSlug" class="ltr">?id=jemro</span></small>
+            <small>الرابط: <span id="previewSlug" class="ltr">?id=...</span></small>
           </div>
           <div class="field">
             <label>اسم المتجر أو العيادة (كما يظهر للزبائن) *</label>
@@ -181,7 +182,7 @@
           </div>
         </div>
 
-        <div class="grid-2">
+        <div class="grid-3">
           <div class="field">
             <label>اللغة الافتراضية</label>
             <select id="f_lang">
@@ -190,24 +191,71 @@
             </select>
           </div>
           <div class="field">
-            <label>كود الدولة للواتساب (الأردن: 962)</label>
+            <label>كود الدولة (الأردن: 962)</label>
             <input type="text" id="f_countryCode" class="ltr" value="962">
+          </div>
+          <div class="field">
+            <label>اسم جدول الإحصائيات (اختياري)</label>
+            <input type="text" id="f_sheetName" placeholder="يُملأ تلقائياً إن تُرك فارغاً">
           </div>
         </div>
 
-        <div class="field">
-          <label>اسم ملف جدول الإحصائيات (اختياري — يُملأ تلقائياً إذا تركتيه فارغاً)</label>
-          <input type="text" id="f_sheetName" placeholder="مثال: Jemro Clinic - Eyelysis Live Analytics">
+        <!-- الهوية البصرية (White-Label) -->
+        <div class="section-box">
+          <h3>🎨 الهوية البصرية للعميل (شعار ولون خاص)</h3>
+          <div class="grid-2">
+            <div class="field" style="margin-bottom:0;">
+              <label>رابط الشعار المباشر (Logo URL — اختياري)</label>
+              <input type="url" id="f_logoUrl" class="ltr" placeholder="https://.../logo.png">
+              <small>يظهر أعلى صفحة التقييم وعلى بطاقة الـ QR المصممة.</small>
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label>لون هوية المتجر (Brand Color)</label>
+              <div class="color-row">
+                <input type="color" id="f_brandColorPicker" value="#2563eb" oninput="syncColorFromPicker()">
+                <input type="text" id="f_brandColor" class="ltr" value="#2563eb" oninput="syncColorFromText()">
+              </div>
+              <small>يتلون الشريط العلوي والأزرار وبطاقة الـ QR بهذا اللون.</small>
+            </div>
+          </div>
         </div>
 
-        <!-- الميزات والإضافات -->
+        <!-- الاشتراك وتاريخ الانتهاء والحماية -->
         <div class="section-box">
-          <h3>حالة الاشتراك والإضافات الاختيارية</h3>
+          <h3>
+            <span>📅 الاشتراك، تاريخ الانتهاء، ومنع التكرار</span>
+            <div class="btn-row">
+              <button type="button" class="btn btn-light btn-sm" onclick="setExpiryMonths(1)">+1 شهر</button>
+              <button type="button" class="btn btn-light btn-sm" onclick="setExpiryMonths(6)">+6 أشهر</button>
+              <button type="button" class="btn btn-light btn-sm" onclick="setExpiryExact('2027-12-31')">عرض نوفمبر (2027/12/31)</button>
+            </div>
+          </h3>
+          <div class="grid-3">
+            <div class="field" style="margin-bottom:0;">
+              <label>تاريخ انتهاء الاشتراك (اختياري)</label>
+              <input type="date" id="f_expiryDate" class="ltr">
+              <small>اتركيه فارغاً للاشتراكات غير المحددة.</small>
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label>مدة منع التكرار (ساعات)</label>
+              <input type="number" id="f_spamHours" class="ltr" min="1" max="720" value="24">
+              <small>تُطبّق فقط عند تفعيل خيار منع السبام أدناه.</small>
+            </div>
+            <div class="field" style="margin-bottom:0; display:flex; flex-direction:column; justify-content:center; gap:8px;">
+              <label class="toggle-item" style="padding:8px 10px;"><input type="checkbox" id="f_autoExpire" checked> ⏱️ إيقاف تلقائي عند الانتهاء</label>
+              <label class="toggle-item" style="padding:8px 10px;"><input type="checkbox" id="f_enableAntiSpam"> 🛡️ منع التكرار والسبام</label>
+            </div>
+          </div>
+        </div>
+
+        <!-- مفاتيح الإضافات -->
+        <div class="section-box">
+          <h3>⚙️ حالة التفعيل والإضافات الاختيارية</h3>
           <div class="toggles-grid">
             <label class="toggle-item"><input type="checkbox" id="f_active" checked> 🟢 الاشتراك نشط (شغّال)</label>
-            <label class="toggle-item"><input type="checkbox" id="f_enableTable" checked> 🪑 خانة رقم الطاولة / الفاتورة</label>
-            <label class="toggle-item"><input type="checkbox" id="f_enableAnalytics"> 📊 إضافة (أ): جدول الإحصائيات الحي</label>
-            <label class="toggle-item"><input type="checkbox" id="f_enableWhatsapp"> 💬 إضافة (ب): رقم هاتف + زر واتساب</label>
+            <label class="toggle-item"><input type="checkbox" id="f_enableTable" checked> 🪑 خانة الطاولة / الفاتورة</label>
+            <label class="toggle-item"><input type="checkbox" id="f_enableAnalytics"> 📊 إضافة (أ): الإحصائيات الحية</label>
+            <label class="toggle-item"><input type="checkbox" id="f_enableWhatsapp"> 💬 إضافة (ب): هاتف + زر واتساب</label>
             <label class="toggle-item"><input type="checkbox" id="f_enableCoupon" onchange="toggleCouponFields()"> 🎟️ إضافة (ب): كوبون الترضية</label>
             <label class="toggle-item"><input type="checkbox" id="f_enableAiReport"> 🤖 إضافة (ج): تقرير الذكاء الاصطناعي</label>
           </div>
@@ -215,47 +263,57 @@
 
         <!-- إعدادات الكوبون -->
         <div class="section-box" id="couponSettingsBox" style="display:none;">
-          <h3>إعدادات كوبون الترضية (للشكاوى 1–3 نجوم)</h3>
-          <div class="grid-2">
-            <div class="field">
-              <label>بادئة كود الكوبون (إنجليزي)</label>
+          <h3>🎟️ إعدادات كوبون الترضية (للشكاوى 1–3 نجوم)</h3>
+          <div class="grid-3">
+            <div class="field" style="margin-bottom:0;">
+              <label>بادئة كود الكوبون</label>
               <input type="text" id="f_couponCode" class="ltr" placeholder="CARE15">
             </div>
-            <div class="field">
+            <div class="field" style="margin-bottom:0;">
               <label>وصف العرض (عربي)</label>
               <input type="text" id="f_couponOfferAr" placeholder="خصم 15% في زيارتك القادمة">
             </div>
-          </div>
-          <div class="field" style="margin-bottom:0;">
-            <label>وصف العرض (إنجليزي)</label>
-            <input type="text" id="f_couponOfferEn" class="ltr" placeholder="15% OFF your next visit">
+            <div class="field" style="margin-bottom:0;">
+              <label>وصف العرض (إنجليزي)</label>
+              <input type="text" id="f_couponOfferEn" class="ltr" placeholder="15% OFF your next visit">
+            </div>
           </div>
         </div>
 
-        <!-- جمل السيو -->
+        <!-- قوالب القطاعات (جمل السيو + أسباب الشكوى) -->
         <div class="section-box">
           <h3>
-            <span>جمل التقييم الجاهزة (SEO) — سطر لكل جملة</span>
+            <span>✨ قوالب القطاع السريعة (تعبّئ جمل السيو + أسباب الشكوى معاً)</span>
             <div class="btn-row">
-              <button type="button" class="btn btn-light btn-sm" onclick="fillSeoPreset('restaurant')">🍽️ قالب مطعم</button>
-              <button type="button" class="btn btn-light btn-sm" onclick="fillSeoPreset('cafe')">☕ قالب كافيه</button>
-              <button type="button" class="btn btn-light btn-sm" onclick="fillSeoPreset('clinic')">🏥 قالب عيادة</button>
-              <button type="button" class="btn btn-light btn-sm" onclick="fillSeoPreset('salon')">💅 قالب صالون</button>
+              <button type="button" class="btn btn-light btn-sm" onclick="fillSectorPreset('restaurant')">🍽️ مطعم</button>
+              <button type="button" class="btn btn-light btn-sm" onclick="fillSectorPreset('cafe')">☕ كافيه</button>
+              <button type="button" class="btn btn-light btn-sm" onclick="fillSectorPreset('clinic')">🏥 عيادة</button>
+              <button type="button" class="btn btn-light btn-sm" onclick="fillSectorPreset('salon')">💅 صالون</button>
             </div>
           </h3>
-          <div class="grid-2">
+          <div class="grid-2" style="margin-bottom:12px;">
             <div class="field" style="margin-bottom:0;">
-              <label>الجمل العربية</label>
+              <label>جمل التقييم الإيجابية (عربي — سطر لكل جملة)</label>
               <textarea id="f_seoAr" placeholder="اكتبي كل جملة في سطر مستقل..."></textarea>
             </div>
             <div class="field" style="margin-bottom:0;">
-              <label>الجمل الإنجليزية</label>
+              <label>جمل التقييم الإيجابية (إنجليزي — سطر لكل جملة)</label>
               <textarea id="f_seoEn" class="ltr" placeholder="Write one English sentence per line..."></textarea>
+            </div>
+          </div>
+          <div class="grid-2">
+            <div class="field" style="margin-bottom:0;">
+              <label>أسباب الشكوى المخصّصة للقطاع (عربي — سطر لكل سبب)</label>
+              <textarea id="f_reasonsAr" placeholder="تأخر الطلب&#10;جودة الخدمة&#10;الأسعار..."></textarea>
+            </div>
+            <div class="field" style="margin-bottom:0;">
+              <label>أسباب الشكوى المخصّصة للقطاع (إنجليزي — سطر لكل سبب)</label>
+              <textarea id="f_reasonsEn" class="ltr" placeholder="Slow Service&#10;Quality Issue&#10;Pricing..."></textarea>
             </div>
           </div>
         </div>
 
-        <!-- أزرار الحفظ والإجراءات -->
+        <!-- أزرار الحفظ -->
         <div class="btn-row" style="justify-content:space-between; margin-top:12px;">
           <div class="btn-row">
             <button class="btn btn-success" id="saveBtn" onclick="saveCurrentMerchant()">💾 حفظ وتفعيل فوراً (Done)</button>
@@ -264,15 +322,16 @@
           <button class="btn btn-danger" id="deleteBtn" type="button" style="display:none;" onclick="deleteCurrentMerchant()">🗑️ حذف العميل</button>
         </div>
 
-        <!-- صندوق الباركود الفوري -->
+        <!-- صندوق الباركود + البطاقة المصممة -->
         <div id="qrPanel" class="qr-panel" style="display:none;">
           <div id="qrPreview" class="qr-preview"></div>
           <div class="qr-info">
-            <strong style="color:#166534; font-size:15px;">✅ باركود العميل جاهز للاستخدام والتسليم</strong>
+            <strong style="color:#166534; font-size:15px;">✅ باركود العميل وبطاقة الطباعة جاهزان</strong>
             <div id="qrFullUrl" class="qr-url"></div>
             <div class="btn-row">
-              <button class="btn btn-primary btn-sm" type="button" onclick="downloadQrPng()">⬇️ تحميل PNG عالي الدقة</button>
-              <button class="btn btn-light btn-sm" type="button" onclick="downloadQrSvg()">⬇️ تحميل SVG للطباعة</button>
+              <button class="btn btn-dark btn-sm" type="button" onclick="downloadDesignedQrCard()">🪪 تحميل بطاقة QR مصممة (جاهزة للطباعة)</button>
+              <button class="btn btn-primary btn-sm" type="button" onclick="downloadQrPng()">⬇️ QR فقط (PNG)</button>
+              <button class="btn btn-light btn-sm" type="button" onclick="downloadQrSvg()">⬇️ QR للمطبعة (SVG)</button>
               <button class="btn btn-light btn-sm" type="button" onclick="copyQrUrl()">📋 نسخ الرابط</button>
               <a id="openTestLink" href="#" target="_blank" class="btn btn-light btn-sm">🔗 فتح وتجربة الآن</a>
             </div>
@@ -285,7 +344,7 @@
   <div id="toast" class="toast"></div>
 
   <script>
-    // (اختياري) يمكنكِ لصق رابط الـ Web App هنا ليكون جاهزاً تلقائياً دون كتابته في شاشة الدخول
+    // (اختياري) يمكنكِ وضع رابط /exec هنا ليكون جاهزاً تلقائياً عند فتح شاشة الدخول
     const DEFAULT_WEB_APP_URL = "";
 
     let state = {
@@ -297,11 +356,10 @@
       lastQrUrl: ""
     };
 
-    // تعبئة الإعدادات المحفوظة مسبقاً عند فتح الصفحة
     window.addEventListener("DOMContentLoaded", () => {
       const savedUrl = localStorage.getItem("eyelysis_v2_webapp") || DEFAULT_WEB_APP_URL;
       const defaultBase = window.location.href.replace(/admin\.html.*$/i, "").replace(/\?.*$/, "");
-      const savedBase = localStorage.getItem("eyelysis_v2_base") || (defaultBase.startsWith("http") ? defaultBase : "https://eyelysis.com/eyelysis-v2/");
+      const savedBase = localStorage.getItem("eyelysis_v2_base") || (defaultBase.startsWith("http") ? defaultBase : "https://eyelysis.com/v2/");
 
       document.getElementById("loginWebAppUrl").value = savedUrl;
       document.getElementById("loginBaseRateUrl").value = savedBase;
@@ -313,7 +371,47 @@
       el.className = "toast " + type;
       el.style.display = "block";
       clearTimeout(window._toastTimer);
-      window._toastTimer = setTimeout(() => { el.style.display = "none"; }, 3500);
+      window._toastTimer = setTimeout(() => { el.style.display = "none"; }, 3600);
+    }
+
+    function syncColorFromPicker() {
+      document.getElementById("f_brandColor").value = document.getElementById("f_brandColorPicker").value;
+    }
+
+    function syncColorFromText() {
+      const val = document.getElementById("f_brandColor").value.trim();
+      if (/^#[0-9a-fA-F]{6}$/.test(val)) {
+        document.getElementById("f_brandColorPicker").value = val;
+      }
+    }
+
+    function setExpiryMonths(months) {
+      const d = new Date();
+      d.setMonth(d.getMonth() + months);
+      const y = d.getFullYear();
+      const m = String(d.getMonth() + 1).padStart(2, "0");
+      const day = String(d.getDate()).padStart(2, "0");
+      document.getElementById("f_expiryDate").value = `${y}-${m}-${day}`;
+    }
+
+    function setExpiryExact(dateStr) {
+      document.getElementById("f_expiryDate").value = dateStr;
+    }
+
+    function getSubscriptionBadge(m) {
+      if (!m.active) return { text: "متوقف", cls: "pill-off" };
+      if (!m.expiryDate) return { text: "نشط", cls: "pill-on" };
+
+      const today = new Date();
+      today.setHours(0, 0, 0, 0);
+      const p = m.expiryDate.split("-");
+      if (p.length !== 3) return { text: "نشط", cls: "pill-on" };
+      const exp = new Date(Number(p[0]), Number(p[1]) - 1, Number(p[2]));
+      const diffDays = Math.round((exp - today) / (1000 * 60 * 60 * 24));
+
+      if (diffDays < 0) return { text: "منتهٍ", cls: "pill-off" };
+      if (diffDays <= 7) return { text: `ينتهي (${diffDays}ي)`, cls: "pill-warn" };
+      return { text: "نشط", cls: "pill-on" };
     }
 
     async function apiCall(payload) {
@@ -338,7 +436,7 @@
         showToast("يرجى إدخال كلمة السر.", "err");
         return;
       }
-      if (!base) base = "https://eyelysis.com/rate/";
+      if (!base) base = "https://eyelysis.com/v2/";
       if (!base.endsWith("/") && !base.endsWith(".html")) base += "/";
 
       const btn = document.getElementById("loginBtn");
@@ -374,9 +472,9 @@
         document.getElementById("appView").style.display = "block";
         renderMerchantList();
         startNewMerchant();
-        showToast("تم الدخول بنجاح! أهلاً بكِ في لوحة التحكم.", "ok");
+        showToast("تم الدخول بنجاح إلى Eyelysis Pro!", "ok");
       } catch (e) {
-        showToast("تعذر الاتصال بالمحرك. تأكدي من أن النشر مضبوط على Anyone.", "err");
+        showToast("تعذر الاتصال بالمحرك. تأكدي من إعداد النشر على Anyone.", "err");
       } finally {
         btn.disabled = false;
         btn.textContent = "دخول إلى لوحة التحكم";
@@ -419,15 +517,22 @@
       }
 
       filtered.forEach(m => {
+        const badge = getSubscriptionBadge(m);
         const div = document.createElement("div");
         div.className = "merchant-item" + (state.selectedId === m.id ? " selected" : "");
         div.onclick = () => selectMerchant(m.id);
         div.innerHTML = `
           <div class="merchant-item-top">
-            <span class="merchant-name">${escapeHtml(m.name)}</span>
-            <span class="pill ${m.active ? "pill-on" : "pill-off"}">${m.active ? "نشط" : "متوقف"}</span>
+            <span class="merchant-name">
+              <span class="color-dot" style="background:${escapeHtml(m.brandColor || "#2563eb")};"></span>
+              ${escapeHtml(m.name)}
+            </span>
+            <span class="pill ${badge.cls}">${badge.text}</span>
           </div>
-          <div class="merchant-id">?id=${escapeHtml(m.id)}</div>
+          <div class="merchant-meta">
+            <span class="merchant-id">?id=${escapeHtml(m.id)}</span>
+            <span>${m.expiryDate ? "ينتهي: " + escapeHtml(m.expiryDate) : "مفتوح"}</span>
+          </div>
         `;
         container.appendChild(div);
       });
@@ -449,6 +554,16 @@
       document.getElementById("f_countryCode").value = m.countryCode || "962";
       document.getElementById("f_sheetName").value = m.sheetName || "";
 
+      document.getElementById("f_logoUrl").value = m.logoUrl || "";
+      const col = /^#[0-9a-fA-F]{6}$/.test(m.brandColor || "") ? m.brandColor : "#2563eb";
+      document.getElementById("f_brandColor").value = col;
+      document.getElementById("f_brandColorPicker").value = col;
+
+      document.getElementById("f_expiryDate").value = m.expiryDate || "";
+      document.getElementById("f_autoExpire").checked = m.autoExpire !== false;
+      document.getElementById("f_enableAntiSpam").checked = !!m.enableAntiSpam;
+      document.getElementById("f_spamHours").value = m.spamHours || 24;
+
       document.getElementById("f_active").checked = !!m.active;
       document.getElementById("f_enableTable").checked = !!m.enableTable;
       document.getElementById("f_enableAnalytics").checked = !!m.enableAnalytics;
@@ -461,6 +576,8 @@
       document.getElementById("f_couponOfferEn").value = m.couponOfferEn || "";
       document.getElementById("f_seoAr").value = (m.seoAr || []).join("\n");
       document.getElementById("f_seoEn").value = (m.seoEn || []).join("\n");
+      document.getElementById("f_reasonsAr").value = (m.reasonsAr || []).join("\n");
+      document.getElementById("f_reasonsEn").value = (m.reasonsEn || []).join("\n");
 
       toggleCouponFields();
       renderMerchantList();
@@ -481,12 +598,23 @@
       document.getElementById("f_countryCode").value = "962";
       document.getElementById("f_sheetName").value = "";
 
+      document.getElementById("f_logoUrl").value = "";
+      document.getElementById("f_brandColor").value = "#2563eb";
+      document.getElementById("f_brandColorPicker").value = "#2563eb";
+
+      document.getElementById("f_expiryDate").value = "";
+      document.getElementById("f_autoExpire").checked = true;
+      document.getElementById("f_enableAntiSpam").checked = true;
+      document.getElementById("f_spamHours").value = 24;
+
       applyPackagePreset("basic", true);
       document.getElementById("f_couponCode").value = "CARE15";
       document.getElementById("f_couponOfferAr").value = "خصم 15% في زيارتك القادمة";
       document.getElementById("f_couponOfferEn").value = "15% OFF your next visit";
       document.getElementById("f_seoAr").value = "";
       document.getElementById("f_seoEn").value = "";
+      document.getElementById("f_reasonsAr").value = "";
+      document.getElementById("f_reasonsEn").value = "";
 
       renderMerchantList();
       refreshQrBox();
@@ -515,11 +643,12 @@
       document.getElementById("couponSettingsBox").style.display = on ? "block" : "none";
     }
 
-    function fillSeoPreset(sector) {
+    function fillSectorPreset(sector) {
       const store = document.getElementById("f_name").value.trim() || "هذا المكان";
       const presets = {
         restaurant: {
           table: true,
+          color: "#b45309",
           ar: [
             `تجربة رائعة في ${store}! الأكل طازج وساخن والنكهة ممتازة، والخدمة سريعة ونظيفة جداً.`,
             `أفضل مطعم في عمّان، جودة عالية وتعامل الموظفين راقٍ جداً. أنصح بتجربته بقوة.`
@@ -527,10 +656,13 @@
           en: [
             `Amazing dining experience at ${store}! Fresh food, rich flavor, and super fast service.`,
             `One of the best restaurants in Amman. Clean place, friendly staff, and great value!`
-          ]
+          ],
+          reasonsAr: ["تأخر الطلب", "جودة الطعام", "الأسعار", "النظافة", "تعامل الموظفين", "أخرى"],
+          reasonsEn: ["Slow Service", "Food Quality", "Pricing", "Cleanliness", "Staff Attitude", "Other"]
         },
         cafe: {
           table: true,
+          color: "#6d28d9",
           ar: [
             `قهوة مختصة رائعة وأجواء هادئة ومريحة في ${store}، والحلويات طازجة جداً.`,
             `من أجمل كافيهات عمّان! الخدمة سريعة والموظفون ودودون جداً، تجربة تستحق التكرار.`
@@ -538,10 +670,13 @@
           en: [
             `Best specialty coffee in Amman at ${store}! Cozy atmosphere, fresh desserts, and friendly staff.`,
             `Great cafe experience! Fast service, relaxing vibe, and top-notch hospitality.`
-          ]
+          ],
+          reasonsAr: ["تأخر الطلب", "جودة القهوة أو الحلويات", "الأسعار", "الأجواء والنظافة", "تعامل الموظفين", "أخرى"],
+          reasonsEn: ["Slow Service", "Coffee / Dessert Quality", "Pricing", "Cleanliness & Vibe", "Staff Attitude", "Other"]
         },
         clinic: {
           table: false,
+          color: "#0284c7",
           ar: [
             `تجربة ممتازة في ${store}، التزام دقيق بالمواعيد ونظافة عالية وتعامل راقٍ ومطمئن من الكادر الطبي.`,
             `أفضل عيادة في عمّان من ناحية الاحترافية والاهتمام بالمريض والنتائج الدقيقة. أنصح بها بشدة.`
@@ -549,10 +684,13 @@
           en: [
             `Excellent medical care at ${store}! Punctual appointments, spotless clinic, and very caring staff.`,
             `Highly professional clinic in Amman. Clear diagnosis, gentle care, and welcoming reception.`
-          ]
+          ],
+          reasonsAr: ["طول وقت الانتظار", "تعامل الاستقبال", "وضوح الشرح الطبي", "النظافة والتعقيم", "الأسعار", "أخرى"],
+          reasonsEn: ["Long Wait Time", "Reception Attitude", "Clarity of Explanation", "Hygiene & Sterilization", "Pricing", "Other"]
         },
         salon: {
           table: false,
+          color: "#be185d",
           ar: [
             `خدمة راقية ونتائج مذهلة في ${store}، اهتمام بأدق التفاصيل ونظافة ممتازة وتعامل لطيف جداً.`,
             `أفضل صالون ومركز تجميل في عمّان! فريق محترف ومنتجات أصلية، سأكرر الزيارة بالتأكيد.`
@@ -560,16 +698,22 @@
           en: [
             `Amazing service and stunning results at ${store}! Clean salon, talented team, and warm hospitality.`,
             `Best beauty center in Amman! Great attention to detail and professional staff. Highly recommended!`
-          ]
+          ],
+          reasonsAr: ["تأخر الموعد", "نتيجة الخدمة", "الأسعار", "النظافة", "تعامل الموظفات", "أخرى"],
+          reasonsEn: ["Appointment Delay", "Service Result", "Pricing", "Cleanliness", "Staff Attitude", "Other"]
         }
       };
 
       const p = presets[sector];
       if (!p) return;
       document.getElementById("f_enableTable").checked = p.table;
+      document.getElementById("f_brandColor").value = p.color;
+      document.getElementById("f_brandColorPicker").value = p.color;
       document.getElementById("f_seoAr").value = p.ar.join("\n");
       document.getElementById("f_seoEn").value = p.en.join("\n");
-      showToast("تمت تعبئة جمل الـ SEO الجاهزة للقطاع بنجاح.", "ok");
+      document.getElementById("f_reasonsAr").value = p.reasonsAr.join("\n");
+      document.getElementById("f_reasonsEn").value = p.reasonsEn.join("\n");
+      showToast("تمت تعبئة جمل الـ SEO وأسباب الشكوى ولون القطاع بنجاح.", "ok");
     }
 
     async function saveCurrentMerchant() {
@@ -606,7 +750,15 @@
         couponOfferAr: document.getElementById("f_couponOfferAr").value.trim(),
         couponOfferEn: document.getElementById("f_couponOfferEn").value.trim(),
         seoAr: document.getElementById("f_seoAr").value.trim(),
-        seoEn: document.getElementById("f_seoEn").value.trim()
+        seoEn: document.getElementById("f_seoEn").value.trim(),
+        logoUrl: document.getElementById("f_logoUrl").value.trim(),
+        brandColor: document.getElementById("f_brandColor").value.trim() || "#2563eb",
+        reasonsAr: document.getElementById("f_reasonsAr").value.trim(),
+        reasonsEn: document.getElementById("f_reasonsEn").value.trim(),
+        enableAntiSpam: document.getElementById("f_enableAntiSpam").checked,
+        spamHours: Number(document.getElementById("f_spamHours").value) || 24,
+        expiryDate: document.getElementById("f_expiryDate").value.trim(),
+        autoExpire: document.getElementById("f_autoExpire").checked
       };
 
       try {
@@ -617,7 +769,7 @@
         }
         state.merchants = data.merchants || [];
         selectMerchant(cleanId);
-        showToast("✅ تم الحفظ والتفعيل فوراً بدون لمس أي كود!", "ok");
+        showToast("✅ تم الحفظ والتفعيل فوراً!", "ok");
       } catch (e) {
         showToast("فشل الاتصال بالخادم أثناء الحفظ.", "err");
       } finally {
@@ -628,7 +780,7 @@
 
     async function deleteCurrentMerchant() {
       if (!state.selectedId) return;
-      if (!confirm(`هل أنتِ متأكدة من حذف العميل (${state.selectedId})؟ يمكنكِ بدلاً من ذلك فقط إلغاء علامة "الاشتراك نشط".`)) {
+      if (!confirm(`هل أنتِ متأكدة من حذف العميل (${state.selectedId})؟ يمكنكِ بدلاً من ذلك إزالة علامة "الاشتراك نشط".`)) {
         return;
       }
       try {
@@ -714,6 +866,170 @@
       }
 
       canvas.toBlob(blob => triggerDownload(blob, `QR_${cleanId}.png`), "image/png");
+    }
+
+    // --- مولّد بطاقة الـ QR المصممة والجاهزة للطباعة (1200x1680 عالية الدقة) ---
+    function loadImageSafe(url) {
+      return new Promise(resolve => {
+        if (!url) return resolve(null);
+        const img = new Image();
+        img.crossOrigin = "anonymous";
+        const timer = setTimeout(() => resolve(null), 3500);
+        img.onload = () => { clearTimeout(timer); resolve(img); };
+        img.onerror = () => { clearTimeout(timer); resolve(null); };
+        img.src = url;
+      });
+    }
+
+    function drawRoundRect(ctx, x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y);
+      ctx.lineTo(x + w - r, y);
+      ctx.quadraticCurveTo(x + w, y, x + w, y + r);
+      ctx.lineTo(x + w, y + h - r);
+      ctx.quadraticCurveTo(x + w, y + h, x + w - r, y + h);
+      ctx.lineTo(x + r, y + h);
+      ctx.quadraticCurveTo(x, y + h, x, y + h - r);
+      ctx.lineTo(x, y + r);
+      ctx.quadraticCurveTo(x, y, x + r, y);
+      ctx.closePath();
+    }
+
+    async function downloadDesignedQrCard() {
+      if (!state.lastQrUrl) return;
+      const cleanId = document.getElementById("f_id").value.trim() || "eyelysis";
+      const storeName = document.getElementById("f_name").value.trim() || cleanId;
+      const brandColor = /^#[0-9a-fA-F]{6}$/.test(document.getElementById("f_brandColor").value.trim())
+        ? document.getElementById("f_brandColor").value.trim()
+        : "#2563eb";
+      const logoUrl = document.getElementById("f_logoUrl").value.trim();
+
+      showToast("جاري تجهيز بطاقة الـ QR المصممة...", "ok");
+
+      const W = 1200, H = 1680;
+      const canvas = document.createElement("canvas");
+      canvas.width = W;
+      canvas.height = H;
+      const ctx = canvas.getContext("2d");
+
+      ctx.fillStyle = "#ffffff";
+      ctx.fillRect(0, 0, W, H);
+
+      ctx.fillStyle = brandColor;
+      ctx.fillRect(0, 0, W, 38);
+
+      ctx.strokeStyle = "#e2e8f0";
+      ctx.lineWidth = 4;
+      drawRoundRect(ctx, 48, 76, W - 96, H - 124, 36);
+      ctx.stroke();
+
+      const logoImg = await loadImageSafe(logoUrl);
+      let cursorY = 140;
+      if (logoImg) {
+        const maxW = 340, maxH = 140;
+        const ratio = Math.min(maxW / logoImg.width, maxH / logoImg.height, 1);
+        const dw = logoImg.width * ratio;
+        const dh = logoImg.height * ratio;
+        ctx.drawImage(logoImg, (W - dw) / 2, cursorY, dw, dh);
+        cursorY += dh + 42;
+      } else {
+        ctx.fillStyle = brandColor;
+        ctx.beginPath();
+        ctx.arc(W / 2, cursorY + 48, 52, 0, Math.PI * 2);
+        ctx.fill();
+        ctx.fillStyle = "#ffffff";
+        ctx.font = "bold 50px Arial, sans-serif";
+        ctx.textAlign = "center";
+        ctx.textBaseline = "middle";
+        ctx.fillText(storeName.charAt(0).toUpperCase(), W / 2, cursorY + 50);
+        cursorY += 136;
+      }
+
+      ctx.fillStyle = "#0f172a";
+      ctx.textAlign = "center";
+      ctx.textBaseline = "alphabetic";
+      let nameFontSize = storeName.length > 26 ? 46 : 58;
+      ctx.font = `800 ${nameFontSize}px Tahoma, Arial, sans-serif`;
+      ctx.fillText(storeName, W / 2, cursorY + 44, W - 160);
+      cursorY += 105;
+
+      ctx.fillStyle = brandColor;
+      drawRoundRect(ctx, W / 2 - 90, cursorY, 180, 8, 4);
+      ctx.fill();
+      cursorY += 74;
+
+      ctx.fillStyle = "#1e293b";
+      ctx.font = "bold 52px Tahoma, Arial, sans-serif";
+      ctx.fillText("رأيك يهمنا — شاركنا تجربتك", W / 2, cursorY);
+      cursorY += 64;
+
+      ctx.fillStyle = "#475569";
+      ctx.font = "600 32px Arial, sans-serif";
+      ctx.fillText("Share Your Experience With Us", W / 2, cursorY);
+      cursorY += 72;
+
+      ctx.fillStyle = "#f59e0b";
+      ctx.font = "66px Arial, sans-serif";
+      ctx.fillText("★ ★ ★ ★ ★", W / 2, cursorY);
+      cursorY += 46;
+
+      const qrBoxSize = 620;
+      const qrBoxX = (W - qrBoxSize) / 2;
+      const qrBoxY = cursorY;
+
+      ctx.fillStyle = "#ffffff";
+      ctx.strokeStyle = brandColor;
+      ctx.lineWidth = 8;
+      drawRoundRect(ctx, qrBoxX, qrBoxY, qrBoxSize, qrBoxSize, 32);
+      ctx.fill();
+      ctx.stroke();
+
+      const qr = qrcode(0, "H");
+      qr.addData(state.lastQrUrl);
+      qr.make();
+      const count = qr.getModuleCount();
+      const pad = 46;
+      const innerSize = qrBoxSize - pad * 2;
+      const cell = innerSize / count;
+
+      ctx.fillStyle = "#0f172a";
+      for (let r = 0; r < count; r++) {
+        for (let c = 0; c < count; c++) {
+          if (qr.isDark(r, c)) {
+            ctx.fillRect(
+              qrBoxX + pad + c * cell,
+              qrBoxY + pad + r * cell,
+              Math.ceil(cell),
+              Math.ceil(cell)
+            );
+          }
+        }
+      }
+
+      const bottomY = qrBoxY + qrBoxSize + 84;
+      ctx.fillStyle = "#0f172a";
+      ctx.font = "bold 38px Tahoma, Arial, sans-serif";
+      ctx.fillText("امسح الكود بكاميرا هاتفك في ثوانٍ", W / 2, bottomY);
+
+      ctx.fillStyle = "#64748b";
+      ctx.font = "500 28px Arial, sans-serif";
+      ctx.fillText("Point your phone camera at the QR code", W / 2, bottomY + 50);
+
+      ctx.fillStyle = "#94a3b8";
+      ctx.font = "600 24px Arial, sans-serif";
+      ctx.fillText("Powered by Eyelysis  •  eyelysis.com", W / 2, H - 78);
+
+      ctx.fillStyle = brandColor;
+      ctx.fillRect(0, H - 24, W, 24);
+
+      try {
+        canvas.toBlob(blob => {
+          triggerDownload(blob, `QR_Card_${cleanId}.png`);
+          showToast("✅ تم تحميل بطاقة الـ QR المصممة بنجاح!", "ok");
+        }, "image/png");
+      } catch (e) {
+        showToast("تعذر تضمين الشعار الخارجي لقيود CORS؛ جاري التصدير بدونه.", "err");
+      }
     }
 
     function triggerDownload(blob, filename) {

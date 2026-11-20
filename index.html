@@ -19,37 +19,62 @@
     }
     * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
     body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 16px; }
-    .app-card { background: var(--card); width: 100%; max-width: 440px; border-radius: 20px; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); padding: 24px 20px; border: 1px solid var(--border); position: relative; }
-    .top-bar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+    .app-card { background: var(--card); width: 100%; max-width: 440px; border-radius: 22px; box-shadow: 0 14px 36px rgba(15, 23, 42, 0.08); padding: 24px 20px; border: 1px solid var(--border); border-top: 5px solid var(--accent); position: relative; }
+    .top-bar { display: flex; justify-content: flex-end; margin-bottom: 8px; }
     .lang-btn { background: #f1f5f9; border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; }
+
+    /* شعار المتجر (White-Label) */
+    .logo-wrap { text-align: center; margin-bottom: 12px; display: none; }
+    .store-logo { max-height: 68px; max-width: 190px; object-fit: contain; border-radius: 12px; }
+
     .store-title { text-align: center; font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
     .subtitle { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+
+    /* النجوم */
     .stars-box { display: flex; justify-content: center; gap: 10px; margin-bottom: 22px; direction: ltr; }
-    .star { font-size: 40px; cursor: pointer; color: #cbd5e1; transition: transform 0.15s, color 0.15s; user-select: none; }
+    .star { font-size: 42px; cursor: pointer; color: #cbd5e1; transition: transform 0.15s, color 0.15s; user-select: none; }
     .star.active { color: var(--gold); transform: scale(1.12); }
+
+    /* الأقسام الديناميكية */
     .section { display: none; animation: fadeIn 0.25s ease-in-out; }
     @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+    /* أزرار أسباب الشكوى */
     .chips-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; display: block; }
     .chips-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
     .chip { background: #f1f5f9; border: 1px solid var(--border); padding: 8px 12px; border-radius: 12px; font-size: 13px; cursor: pointer; transition: 0.15s; }
-    .chip.selected { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+    .chip.selected { background: var(--accent); color: #fff; border-color: var(--accent); font-weight: 600; }
+
+    /* الحقول */
     .field-group { margin-bottom: 12px; }
     .field-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: var(--primary); }
     .input-box, textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; outline: none; background: #f8fafc; }
     .input-box:focus, textarea:focus { border-color: var(--accent); background: #fff; }
-    textarea { resize: none; height: 80px; }
+    textarea { resize: none; height: 84px; }
+
+    /* صندوق السيو */
     .seo-box { background: #f0fdf4; border: 1px dashed var(--success); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
     .seo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; font-weight: 700; color: var(--success); }
     .shuffle-btn { background: none; border: none; color: var(--accent); font-size: 12px; cursor: pointer; font-weight: 600; text-decoration: underline; }
-    .btn { width: 100%; padding: 13px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-top: 6px; }
-    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+
+    /* الأزرار */
+    .btn { width: 100%; padding: 13px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s, transform 0.1s; margin-top: 6px; }
+    .btn:active { transform: scale(0.99); }
+    .btn:disabled { opacity: 0.7; cursor: not-allowed; }
     .btn-primary { background: var(--accent); color: #fff; }
     .btn-success { background: var(--success); color: #fff; }
     .btn-secondary { background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: underline; margin-top: 12px; }
+
+    /* إشعار سلس بدلاً من alert() */
+    .inline-notice { display: none; margin-top: 10px; padding: 10px 12px; border-radius: 10px; background: #dcfce7; color: #166534; font-size: 13px; font-weight: 700; text-align: center; animation: fadeIn 0.2s ease; }
+
+    /* صندوق الكوبون */
     .coupon-card { background: #fffbeb; border: 2px dashed var(--gold); border-radius: 14px; padding: 16px; text-align: center; margin-top: 14px; }
     .coupon-offer { font-size: 16px; font-weight: 800; color: #b45309; margin-bottom: 6px; }
     .coupon-code { font-size: 18px; font-weight: 900; background: #fef3c7; padding: 8px 12px; border-radius: 8px; display: inline-block; letter-spacing: 1px; color: #92400e; margin: 6px 0; }
     .coupon-meta { font-size: 11px; color: #78350f; margin-top: 6px; }
+
+    /* شاشة التحميل والتوقف */
     .status-screen { text-align: center; padding: 30px 10px; }
     .spinner { width: 36px; height: 36px; border: 4px solid #e2e8f0; border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
     @keyframes spin { to { transform: rotate(360deg); } }
@@ -70,6 +95,9 @@
     </div>
 
     <div id="mainApp" style="display:none;">
+      <div id="logoWrap" class="logo-wrap">
+        <img id="storeLogo" class="store-logo" alt="Store Logo" onerror="document.getElementById('logoWrap').style.display='none'">
+      </div>
       <h1 class="store-title" id="storeName">Store Name</h1>
       <p class="subtitle" id="mainSubtitle">كيف كانت تجربتك معنا اليوم؟</p>
 
@@ -90,6 +118,7 @@
           <textarea id="seoTextarea"></textarea>
         </div>
         <button class="btn btn-success" id="googleBtn" onclick="copyAndGoToGoogle()">نسخ التقييم وفتح خرائط جوجل</button>
+        <div id="copyNotice" class="inline-notice"></div>
         <button class="btn btn-secondary" id="noGoogleBtn" onclick="showDirectPraiseForm()">لا أملك حساب جوجل (إرسال مباشر للإدارة)</button>
       </div>
 
@@ -133,7 +162,7 @@
   </div>
 
   <script>
-    // ⚠️ ضعي هنا رابط Web App الخاص بمشروع Google Apps Script الجديد (V2) مرة واحدة فقط
+    // ⚠️ ضعي هنا رابط Web App الخاص بمشروع Google Apps Script (V2) الذي حصلتِ عليه
     const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw87mlpHFuH1liR6-CNZ8bi_jFke2BosnY1lihw32lgFYr2JH04E2BLQznWVXvDcx4F/exec";
 
     const I18N = {
@@ -145,11 +174,14 @@
         inactiveDesc: "هذه الصفحة غير مفعلة حالياً، يرجى مراجعة إدارة المتجر.",
         notFoundTitle: "الرابط غير مكتمل",
         notFoundDesc: "يرجى مسح رمز QR الصحيح الخاص بالمتجر.",
+        alreadyRatedTitle: "شكراً لك! استلمنا تقييمك مؤخراً ✓",
+        alreadyRatedDesc: "نقدّر مشاركتك معنا. يمكنك إرسال تقييم جديد في زيارتك القادمة.",
         mainSubtitle: "كيف كانت تجربتك معنا اليوم؟",
         seoLabel: "✨ تقييم مقترح جاهز للنسخ (يمكنك تعديله):",
         shuffleBtn: "تغيير الجملة ↻",
         googleBtn: "نسخ التقييم وفتح خرائط جوجل 🌟",
-        copiedAlert: "تم نسخ التقييم! الصقه الآن في خرائط جوجل.",
+        copiedBtn: "✓ تم النسخ! جاري فتح خرائط جوجل...",
+        copiedNotice: "✓ تم نسخ النص — الصقه مباشرة في صفحة خرائط جوجل الآن.",
         noGoogleBtn: "لا أملك حساب جوجل (إرسال إشادة للإدارة)",
         reasonsLabel: "ما الذي أزعجك اليوم؟",
         reasonsList: ["تأخر الطلب", "جودة الخدمة", "الأسعار", "النظافة", "تعامل الموظفين", "أخرى"],
@@ -175,11 +207,14 @@
         inactiveDesc: "This rating page is currently inactive. Please contact store management.",
         notFoundTitle: "Invalid Link",
         notFoundDesc: "Please scan a valid store QR code.",
+        alreadyRatedTitle: "Thank you! Feedback already received ✓",
+        alreadyRatedDesc: "We appreciate your input. You can share another review on your next visit.",
         mainSubtitle: "How was your experience with us today?",
         seoLabel: "✨ Suggested review ready to copy (editable):",
         shuffleBtn: "Change phrase ↻",
         googleBtn: "Copy Review & Open Google Maps 🌟",
-        copiedAlert: "Review copied! Paste it now on Google Maps.",
+        copiedBtn: "✓ Copied! Opening Google Maps...",
+        copiedNotice: "✓ Review copied — paste it directly on Google Maps now.",
         noGoogleBtn: "I don't have a Google account (Send directly)",
         reasonsLabel: "What went wrong today?",
         reasonsList: ["Slow Service", "Quality Issue", "Pricing", "Cleanliness", "Staff Attitude", "Other"],
@@ -247,10 +282,18 @@
       if (merchantData) updateSeoTextarea();
     }
 
+    function getActiveReasonsList() {
+      if (merchantData) {
+        const custom = (currentLang === "ar") ? merchantData.reasonsAr : merchantData.reasonsEn;
+        if (Array.isArray(custom) && custom.length > 0) return custom;
+      }
+      return I18N[currentLang].reasonsList;
+    }
+
     function renderReasonChips() {
       const container = document.getElementById("chipsContainer");
       container.innerHTML = "";
-      I18N[currentLang].reasonsList.forEach(reason => {
+      getActiveReasonsList().forEach(reason => {
         const chip = document.createElement("div");
         chip.className = "chip" + (selectedReasons.has(reason) ? " selected" : "");
         chip.textContent = reason;
@@ -261,6 +304,25 @@
         };
         container.appendChild(chip);
       });
+    }
+
+    function isSpamBlocked() {
+      if (!merchantData || !merchantData.enableAntiSpam) return false;
+      try {
+        const key = "eyelysis_rated_" + merchantId.toLowerCase();
+        const lastTs = Number(localStorage.getItem(key) || "0");
+        const hours = Number(merchantData.spamHours) || 24;
+        return lastTs > 0 && (Date.now() - lastTs) < (hours * 3600 * 1000);
+      } catch (e) {
+        return false;
+      }
+    }
+
+    function markDeviceRated() {
+      if (!merchantData || !merchantData.enableAntiSpam) return;
+      try {
+        localStorage.setItem("eyelysis_rated_" + merchantId.toLowerCase(), String(Date.now()));
+      } catch (e) {}
     }
 
     async function fetchMerchantConfig() {
@@ -275,9 +337,17 @@
           showStatus("inactive", data.name);
         } else if (data.status === "active") {
           merchantData = data;
+          if (data.brandColor) {
+            document.documentElement.style.setProperty("--accent", data.brandColor);
+          }
           if (data.lang === "ar" || data.lang === "en") {
             currentLang = data.lang;
-            applyLanguageUI();
+          }
+          applyLanguageUI();
+
+          if (isSpamBlocked()) {
+            showStatus("alreadyRated", data.name);
+            return;
           }
           initMerchantView();
         }
@@ -303,6 +373,11 @@
         spinner.style.display = "none";
         title.textContent = storeName ? `${storeName} - ${t.inactiveTitle}` : t.inactiveTitle;
         desc.textContent = t.inactiveDesc;
+      } else if (state === "alreadyRated") {
+        spinner.style.display = "none";
+        title.style.color = "var(--success)";
+        title.textContent = t.alreadyRatedTitle;
+        desc.textContent = t.alreadyRatedDesc;
       } else {
         spinner.style.display = "none";
         title.textContent = t.notFoundTitle;
@@ -316,8 +391,18 @@
       document.getElementById("storeName").textContent = merchantData.name;
       document.title = `${merchantData.name} | Rating`;
 
+      const logoWrap = document.getElementById("logoWrap");
+      const logoImg = document.getElementById("storeLogo");
+      if (merchantData.logoUrl) {
+        logoImg.src = merchantData.logoUrl;
+        logoWrap.style.display = "block";
+      } else {
+        logoWrap.style.display = "none";
+      }
+
       document.getElementById("tableFieldWrapper").style.display = merchantData.enableTable ? "block" : "none";
       document.getElementById("phoneFieldWrapper").style.display = merchantData.enableWhatsapp ? "block" : "none";
+      renderReasonChips();
       updateSeoTextarea();
     }
 
@@ -353,13 +438,56 @@
       updateSeoTextarea();
     }
 
-    function copyAndGoToGoogle() {
-      const text = document.getElementById("seoTextarea").value;
-      if (navigator.clipboard && text) {
-        navigator.clipboard.writeText(text).catch(() => {});
+    function copyTextSafely(text) {
+      if (!text) return;
+      if (navigator.clipboard && navigator.clipboard.writeText) {
+        navigator.clipboard.writeText(text).catch(() => fallbackCopy(text));
+      } else {
+        fallbackCopy(text);
       }
-      alert(I18N[currentLang].copiedAlert);
-      window.location.href = merchantData.mapsUrl;
+    }
+
+    function fallbackCopy(text) {
+      const ta = document.getElementById("seoTextarea");
+      ta.focus();
+      ta.select();
+      try { document.execCommand("copy"); } catch (e) {}
+    }
+
+    function copyAndGoToGoogle() {
+      const t = I18N[currentLang];
+      const text = document.getElementById("seoTextarea").value.trim();
+      const btn = document.getElementById("googleBtn");
+      const notice = document.getElementById("copyNotice");
+
+      copyTextSafely(text);
+      btn.disabled = true;
+      btn.textContent = t.copiedBtn;
+      notice.textContent = t.copiedNotice;
+      notice.style.display = "block";
+
+      markDeviceRated();
+
+      // تسجيل الزبون الراضي في عدّاد جدول الإحصائيات تلقائياً في الخلفية بدون تأخير
+      const payload = JSON.stringify({
+        id: merchantId,
+        type: "google_redirect",
+        rating: selectedRating || 5,
+        comment: text
+      });
+
+      try {
+        fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: payload,
+          keepalive: true
+        }).catch(() => {});
+      } catch (e) {}
+
+      setTimeout(() => {
+        window.location.href = merchantData.mapsUrl;
+      }, 650);
     }
 
     function showDirectPraiseForm() {
@@ -393,6 +521,7 @@
           body: JSON.stringify(payload)
         });
         const result = await res.json();
+        markDeviceRated();
         showThankYouScreen(result);
       } catch (e) {
         showThankYouScreen({});
