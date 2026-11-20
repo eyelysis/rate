@@ -1,0 +1,428 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl" id="htmlRoot">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <title>Eyelysis | Smart Rating</title>
+  <style>
+    :root {
+      --primary: #0f172a;
+      --accent: #2563eb;
+      --gold: #f59e0b;
+      --success: #16a34a;
+      --danger: #dc2626;
+      --bg: #f8fafc;
+      --card: #ffffff;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #e2e8f0;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif; }
+    body { background: var(--bg); color: var(--text); min-height: 100vh; display: flex; flex-direction: column; justify-content: center; align-items: center; padding: 16px; }
+    .app-card { background: var(--card); width: 100%; max-width: 440px; border-radius: 20px; box-shadow: 0 12px 32px rgba(15, 23, 42, 0.08); padding: 24px 20px; border: 1px solid var(--border); position: relative; }
+    .top-bar { display: flex; justify-content: flex-end; margin-bottom: 10px; }
+    .lang-btn { background: #f1f5f9; border: 1px solid var(--border); color: var(--text); padding: 6px 12px; border-radius: 20px; font-size: 13px; font-weight: 600; cursor: pointer; }
+    .store-title { text-align: center; font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 6px; }
+    .subtitle { text-align: center; font-size: 14px; color: var(--muted); margin-bottom: 20px; line-height: 1.5; }
+    .stars-box { display: flex; justify-content: center; gap: 10px; margin-bottom: 22px; direction: ltr; }
+    .star { font-size: 40px; cursor: pointer; color: #cbd5e1; transition: transform 0.15s, color 0.15s; user-select: none; }
+    .star.active { color: var(--gold); transform: scale(1.12); }
+    .section { display: none; animation: fadeIn 0.25s ease-in-out; }
+    @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+    .chips-label { font-size: 13px; font-weight: 700; margin-bottom: 8px; display: block; }
+    .chips-container { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 16px; }
+    .chip { background: #f1f5f9; border: 1px solid var(--border); padding: 8px 12px; border-radius: 12px; font-size: 13px; cursor: pointer; transition: 0.15s; }
+    .chip.selected { background: var(--primary); color: #fff; border-color: var(--primary); font-weight: 600; }
+    .field-group { margin-bottom: 12px; }
+    .field-group label { display: block; font-size: 13px; font-weight: 600; margin-bottom: 5px; color: var(--primary); }
+    .input-box, textarea { width: 100%; padding: 11px 12px; border: 1px solid var(--border); border-radius: 10px; font-size: 14px; outline: none; background: #f8fafc; }
+    .input-box:focus, textarea:focus { border-color: var(--accent); background: #fff; }
+    textarea { resize: none; height: 80px; }
+    .seo-box { background: #f0fdf4; border: 1px dashed var(--success); border-radius: 12px; padding: 14px; margin-bottom: 14px; }
+    .seo-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 6px; font-size: 12px; font-weight: 700; color: var(--success); }
+    .shuffle-btn { background: none; border: none; color: var(--accent); font-size: 12px; cursor: pointer; font-weight: 600; text-decoration: underline; }
+    .btn { width: 100%; padding: 13px; border: none; border-radius: 12px; font-size: 15px; font-weight: 700; cursor: pointer; transition: opacity 0.2s; margin-top: 6px; }
+    .btn:disabled { opacity: 0.6; cursor: not-allowed; }
+    .btn-primary { background: var(--accent); color: #fff; }
+    .btn-success { background: var(--success); color: #fff; }
+    .btn-secondary { background: transparent; color: var(--muted); font-size: 13px; font-weight: 600; text-decoration: underline; margin-top: 12px; }
+    .coupon-card { background: #fffbeb; border: 2px dashed var(--gold); border-radius: 14px; padding: 16px; text-align: center; margin-top: 14px; }
+    .coupon-offer { font-size: 16px; font-weight: 800; color: #b45309; margin-bottom: 6px; }
+    .coupon-code { font-size: 18px; font-weight: 900; background: #fef3c7; padding: 8px 12px; border-radius: 8px; display: inline-block; letter-spacing: 1px; color: #92400e; margin: 6px 0; }
+    .coupon-meta { font-size: 11px; color: #78350f; margin-top: 6px; }
+    .status-screen { text-align: center; padding: 30px 10px; }
+    .spinner { width: 36px; height: 36px; border: 4px solid #e2e8f0; border-top-color: var(--accent); border-radius: 50%; animation: spin 0.8s linear infinite; margin: 0 auto 14px; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .footer-brand { text-align: center; font-size: 11px; color: #94a3b8; margin-top: 18px; }
+  </style>
+</head>
+<body>
+
+  <div class="app-card">
+    <div class="top-bar">
+      <button class="lang-btn" id="langBtn" onclick="toggleLanguage()">English</button>
+    </div>
+
+    <div id="statusScreen" class="status-screen">
+      <div class="spinner" id="loaderSpinner"></div>
+      <h2 class="store-title" id="statusTitle">جاري التحميل...</h2>
+      <p class="subtitle" id="statusDesc">يرجى الانتظار لحظة</p>
+    </div>
+
+    <div id="mainApp" style="display:none;">
+      <h1 class="store-title" id="storeName">Store Name</h1>
+      <p class="subtitle" id="mainSubtitle">كيف كانت تجربتك معنا اليوم؟</p>
+
+      <div class="stars-box" id="starsBox">
+        <span class="star" onclick="selectStar(1)">★</span>
+        <span class="star" onclick="selectStar(2)">★</span>
+        <span class="star" onclick="selectStar(3)">★</span>
+        <span class="star" onclick="selectStar(4)">★</span>
+        <span class="star" onclick="selectStar(5)">★</span>
+      </div>
+
+      <div id="positiveSection" class="section">
+        <div class="seo-box">
+          <div class="seo-header">
+            <span id="seoLabel">✨ تقييم مقترح جاهز للنسخ:</span>
+            <button type="button" class="shuffle-btn" id="shuffleBtn" onclick="cycleSeoText()">تغيير الجملة ↻</button>
+          </div>
+          <textarea id="seoTextarea"></textarea>
+        </div>
+        <button class="btn btn-success" id="googleBtn" onclick="copyAndGoToGoogle()">نسخ التقييم وفتح خرائط جوجل</button>
+        <button class="btn btn-secondary" id="noGoogleBtn" onclick="showDirectPraiseForm()">لا أملك حساب جوجل (إرسال مباشر للإدارة)</button>
+      </div>
+
+      <div id="feedbackFormSection" class="section">
+        <div id="reasonsWrapper">
+          <span class="chips-label" id="reasonsLabel">ما الذي أزعجك اليوم؟ (يمكنك اختيار أكثر من سبب):</span>
+          <div class="chips-container" id="chipsContainer"></div>
+        </div>
+
+        <div class="field-group">
+          <label id="commentLabel">تفاصيل الملاحظة:</label>
+          <textarea id="commentInput" placeholder="اكتب ملاحظتك هنا لتصل للإدارة فوراً..."></textarea>
+        </div>
+
+        <div class="field-group" id="tableFieldWrapper" style="display:none;">
+          <label id="tableLabel">رقم الطاولة أو الفاتورة (اختياري):</label>
+          <input type="text" id="tableInput" class="input-box" placeholder="مثال: طاولة 5">
+        </div>
+
+        <div class="field-group" id="phoneFieldWrapper" style="display:none;">
+          <label id="phoneLabel">رقم الهاتف / واتساب للتواصل معك (اختياري):</label>
+          <input type="tel" id="phoneInput" class="input-box" placeholder="079xxxxxxx">
+        </div>
+
+        <button class="btn btn-primary" id="submitBtn" onclick="submitFeedback()">إرسال للإدارة الآن</button>
+      </div>
+
+      <div id="thankYouSection" class="section" style="text-align:center;">
+        <h2 class="store-title" id="thankTitle" style="color:var(--success);">شكراً لتواصلك معنا!</h2>
+        <p class="subtitle" id="thankDesc" style="margin-top:8px;">تم استلام ملاحظتك بنجاح ووصلت للإدارة فوراً.</p>
+
+        <div id="couponBox" class="coupon-card" style="display:none;">
+          <div class="coupon-offer" id="couponOfferText"></div>
+          <div class="coupon-code" id="couponRefCode"></div>
+          <div class="coupon-meta" id="couponMetaText"></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="footer-brand">Powered by <strong>Eyelysis</strong> Reputation Firewall</div>
+  </div>
+
+  <script>
+    // ⚠️ ضعي هنا رابط Web App الخاص بمشروع Google Apps Script الجديد (V2) مرة واحدة فقط
+    const WEB_APP_URL = "https://script.google.com/macros/s/AKfycbw87mlpHFuH1liR6-CNZ8bi_jFke2BosnY1lihw32lgFYr2JH04E2BLQznWVXvDcx4F/exec";
+
+    const I18N = {
+      ar: {
+        langBtn: "English",
+        loadingTitle: "جاري التحميل...",
+        loadingDesc: "يرجى الانتظار لحظة",
+        inactiveTitle: "الخدمة متوقفة مؤقتاً",
+        inactiveDesc: "هذه الصفحة غير مفعلة حالياً، يرجى مراجعة إدارة المتجر.",
+        notFoundTitle: "الرابط غير مكتمل",
+        notFoundDesc: "يرجى مسح رمز QR الصحيح الخاص بالمتجر.",
+        mainSubtitle: "كيف كانت تجربتك معنا اليوم؟",
+        seoLabel: "✨ تقييم مقترح جاهز للنسخ (يمكنك تعديله):",
+        shuffleBtn: "تغيير الجملة ↻",
+        googleBtn: "نسخ التقييم وفتح خرائط جوجل 🌟",
+        copiedAlert: "تم نسخ التقييم! الصقه الآن في خرائط جوجل.",
+        noGoogleBtn: "لا أملك حساب جوجل (إرسال إشادة للإدارة)",
+        reasonsLabel: "ما الذي أزعجك اليوم؟",
+        reasonsList: ["تأخر الطلب", "جودة الخدمة", "الأسعار", "النظافة", "تعامل الموظفين", "أخرى"],
+        commentLabelComplaint: "تفاصيل الملاحظة (تصل سراً للإدارة):",
+        commentLabelPraise: "اكتب كلمتك الطيبة للإدارة:",
+        commentPlaceholder: "اكتب ملاحظتك هنا...",
+        tableLabel: "رقم الطاولة أو الفاتورة (اختياري):",
+        tablePlaceholder: "مثال: 12",
+        phoneLabel: "رقم الهاتف / واتساب للتواصل معك (اختياري):",
+        phonePlaceholder: "مثال: 079xxxxxxx",
+        submitBtn: "إرسال للإدارة الآن",
+        sendingBtn: "جاري الإرسال...",
+        thankTitle: "شكراً لوقتك وملاحظتك!",
+        thankComplaintDesc: "نعتذر عن أي تقصير، وصلت رسالتك للإدارة فوراً وسنعمل على حلها.",
+        thankPraiseDesc: "سعدنا جداً بزيارتك وكلماتك الطيبة!",
+        couponMetaPrefix: "أبرز هذه الشاشة للكاشير | صالحة لمرة واحدة | تاريخ الإصدار: "
+      },
+      en: {
+        langBtn: "العربية",
+        loadingTitle: "Loading...",
+        loadingDesc: "Please wait a moment",
+        inactiveTitle: "Service Temporarily Paused",
+        inactiveDesc: "This rating page is currently inactive. Please contact store management.",
+        notFoundTitle: "Invalid Link",
+        notFoundDesc: "Please scan a valid store QR code.",
+        mainSubtitle: "How was your experience with us today?",
+        seoLabel: "✨ Suggested review ready to copy (editable):",
+        shuffleBtn: "Change phrase ↻",
+        googleBtn: "Copy Review & Open Google Maps 🌟",
+        copiedAlert: "Review copied! Paste it now on Google Maps.",
+        noGoogleBtn: "I don't have a Google account (Send directly)",
+        reasonsLabel: "What went wrong today?",
+        reasonsList: ["Slow Service", "Quality Issue", "Pricing", "Cleanliness", "Staff Attitude", "Other"],
+        commentLabelComplaint: "Feedback details (Sent privately to management):",
+        commentLabelPraise: "Share your kind words with management:",
+        commentPlaceholder: "Write your feedback here...",
+        tableLabel: "Table or Invoice # (Optional):",
+        tablePlaceholder: "e.g., Table 12",
+        phoneLabel: "Phone / WhatsApp number (Optional):",
+        phonePlaceholder: "e.g., +962 79 xxx xxxx",
+        submitBtn: "Send to Management Now",
+        sendingBtn: "Sending...",
+        thankTitle: "Thank You for Your Feedback!",
+        thankComplaintDesc: "We sincerely apologize. Your message was sent directly to management.",
+        thankPraiseDesc: "We are thrilled you enjoyed your visit!",
+        couponMetaPrefix: "Show this screen to cashier | One-time use | Issued: "
+      }
+    };
+
+    let currentLang = (navigator.language || "").toLowerCase().startsWith("ar") ? "ar" : "en";
+    let merchantId = new URLSearchParams(window.location.search).get("id") || "";
+    let merchantData = null;
+    let selectedRating = 0;
+    let feedbackMode = "complaint";
+    let seoIndex = 0;
+    let selectedReasons = new Set();
+
+    window.addEventListener("DOMContentLoaded", () => {
+      applyLanguageUI();
+      if (!merchantId) {
+        showStatus("notFound");
+        return;
+      }
+      fetchMerchantConfig();
+    });
+
+    function toggleLanguage() {
+      currentLang = (currentLang === "ar") ? "en" : "ar";
+      selectedReasons.clear();
+      applyLanguageUI();
+    }
+
+    function applyLanguageUI() {
+      const t = I18N[currentLang];
+      const htmlRoot = document.getElementById("htmlRoot");
+      htmlRoot.lang = currentLang;
+      htmlRoot.dir = (currentLang === "ar") ? "rtl" : "ltr";
+
+      document.getElementById("langBtn").textContent = t.langBtn;
+      document.getElementById("mainSubtitle").textContent = t.mainSubtitle;
+      document.getElementById("seoLabel").textContent = t.seoLabel;
+      document.getElementById("shuffleBtn").textContent = t.shuffleBtn;
+      document.getElementById("googleBtn").textContent = t.googleBtn;
+      document.getElementById("noGoogleBtn").textContent = t.noGoogleBtn;
+      document.getElementById("reasonsLabel").textContent = t.reasonsLabel;
+      document.getElementById("commentLabel").textContent = (feedbackMode === "complaint") ? t.commentLabelComplaint : t.commentLabelPraise;
+      document.getElementById("commentInput").placeholder = t.commentPlaceholder;
+      document.getElementById("tableLabel").textContent = t.tableLabel;
+      document.getElementById("tableInput").placeholder = t.tablePlaceholder;
+      document.getElementById("phoneLabel").textContent = t.phoneLabel;
+      document.getElementById("phoneInput").placeholder = t.phonePlaceholder;
+      document.getElementById("submitBtn").textContent = t.submitBtn;
+
+      renderReasonChips();
+      if (merchantData) updateSeoTextarea();
+    }
+
+    function renderReasonChips() {
+      const container = document.getElementById("chipsContainer");
+      container.innerHTML = "";
+      I18N[currentLang].reasonsList.forEach(reason => {
+        const chip = document.createElement("div");
+        chip.className = "chip" + (selectedReasons.has(reason) ? " selected" : "");
+        chip.textContent = reason;
+        chip.onclick = () => {
+          if (selectedReasons.has(reason)) selectedReasons.delete(reason);
+          else selectedReasons.add(reason);
+          chip.classList.toggle("selected");
+        };
+        container.appendChild(chip);
+      });
+    }
+
+    async function fetchMerchantConfig() {
+      showStatus("loading");
+      try {
+        const res = await fetch(`${WEB_APP_URL}?id=${encodeURIComponent(merchantId)}`);
+        const data = await res.json();
+
+        if (data.status === "not_found") {
+          showStatus("notFound");
+        } else if (data.status === "inactive") {
+          showStatus("inactive", data.name);
+        } else if (data.status === "active") {
+          merchantData = data;
+          if (data.lang === "ar" || data.lang === "en") {
+            currentLang = data.lang;
+            applyLanguageUI();
+          }
+          initMerchantView();
+        }
+      } catch (e) {
+        showStatus("notFound");
+      }
+    }
+
+    function showStatus(state, storeName = "") {
+      const t = I18N[currentLang];
+      document.getElementById("mainApp").style.display = "none";
+      const screen = document.getElementById("statusScreen");
+      const spinner = document.getElementById("loaderSpinner");
+      const title = document.getElementById("statusTitle");
+      const desc = document.getElementById("statusDesc");
+
+      screen.style.display = "block";
+      if (state === "loading") {
+        spinner.style.display = "block";
+        title.textContent = t.loadingTitle;
+        desc.textContent = t.loadingDesc;
+      } else if (state === "inactive") {
+        spinner.style.display = "none";
+        title.textContent = storeName ? `${storeName} - ${t.inactiveTitle}` : t.inactiveTitle;
+        desc.textContent = t.inactiveDesc;
+      } else {
+        spinner.style.display = "none";
+        title.textContent = t.notFoundTitle;
+        desc.textContent = t.notFoundDesc;
+      }
+    }
+
+    function initMerchantView() {
+      document.getElementById("statusScreen").style.display = "none";
+      document.getElementById("mainApp").style.display = "block";
+      document.getElementById("storeName").textContent = merchantData.name;
+      document.title = `${merchantData.name} | Rating`;
+
+      document.getElementById("tableFieldWrapper").style.display = merchantData.enableTable ? "block" : "none";
+      document.getElementById("phoneFieldWrapper").style.display = merchantData.enableWhatsapp ? "block" : "none";
+      updateSeoTextarea();
+    }
+
+    function selectStar(stars) {
+      selectedRating = stars;
+      const starEls = document.querySelectorAll(".star");
+      starEls.forEach((el, idx) => el.classList.toggle("active", idx < stars));
+      document.getElementById("thankYouSection").style.display = "none";
+
+      if (stars >= 4) {
+        document.getElementById("positiveSection").style.display = "block";
+        document.getElementById("feedbackFormSection").style.display = "none";
+        updateSeoTextarea();
+      } else {
+        feedbackMode = "complaint";
+        document.getElementById("positiveSection").style.display = "none";
+        document.getElementById("reasonsWrapper").style.display = "block";
+        document.getElementById("commentLabel").textContent = I18N[currentLang].commentLabelComplaint;
+        document.getElementById("feedbackFormSection").style.display = "block";
+      }
+    }
+
+    function updateSeoTextarea() {
+      if (!merchantData) return;
+      const list = (currentLang === "ar") ? merchantData.seoAr : merchantData.seoEn;
+      if (list && list.length > 0) {
+        document.getElementById("seoTextarea").value = list[seoIndex % list.length];
+      }
+    }
+
+    function cycleSeoText() {
+      seoIndex++;
+      updateSeoTextarea();
+    }
+
+    function copyAndGoToGoogle() {
+      const text = document.getElementById("seoTextarea").value;
+      if (navigator.clipboard && text) {
+        navigator.clipboard.writeText(text).catch(() => {});
+      }
+      alert(I18N[currentLang].copiedAlert);
+      window.location.href = merchantData.mapsUrl;
+    }
+
+    function showDirectPraiseForm() {
+      feedbackMode = "praise";
+      document.getElementById("positiveSection").style.display = "none";
+      document.getElementById("reasonsWrapper").style.display = "none";
+      document.getElementById("commentLabel").textContent = I18N[currentLang].commentLabelPraise;
+      document.getElementById("feedbackFormSection").style.display = "block";
+    }
+
+    async function submitFeedback() {
+      const t = I18N[currentLang];
+      const submitBtn = document.getElementById("submitBtn");
+      submitBtn.disabled = true;
+      submitBtn.textContent = t.sendingBtn;
+
+      const payload = {
+        id: merchantId,
+        type: feedbackMode,
+        rating: selectedRating,
+        reasons: (feedbackMode === "complaint") ? Array.from(selectedReasons).join("، ") : "إشادة مباشرة",
+        comment: document.getElementById("commentInput").value.trim(),
+        tableNumber: document.getElementById("tableInput").value.trim(),
+        phone: document.getElementById("phoneInput").value.trim()
+      };
+
+      try {
+        const res = await fetch(WEB_APP_URL, {
+          method: "POST",
+          headers: { "Content-Type": "text/plain;charset=utf-8" },
+          body: JSON.stringify(payload)
+        });
+        const result = await res.json();
+        showThankYouScreen(result);
+      } catch (e) {
+        showThankYouScreen({});
+      } finally {
+        submitBtn.disabled = false;
+        submitBtn.textContent = t.submitBtn;
+      }
+    }
+
+    function showThankYouScreen(result) {
+      const t = I18N[currentLang];
+      document.getElementById("feedbackFormSection").style.display = "none";
+      document.getElementById("starsBox").style.display = "none";
+      document.getElementById("mainSubtitle").style.display = "none";
+
+      const thankSection = document.getElementById("thankYouSection");
+      thankSection.style.display = "block";
+      document.getElementById("thankTitle").textContent = t.thankTitle;
+      document.getElementById("thankDesc").textContent = (feedbackMode === "complaint") ? t.thankComplaintDesc : t.thankPraiseDesc;
+
+      const couponBox = document.getElementById("couponBox");
+      if (feedbackMode === "complaint" && merchantData.enableCoupon && result.couponRef) {
+        couponBox.style.display = "block";
+        document.getElementById("couponOfferText").textContent = (currentLang === "ar") ? merchantData.couponOfferAr : merchantData.couponOfferEn;
+        document.getElementById("couponRefCode").textContent = result.couponRef;
+        document.getElementById("couponMetaText").textContent = t.couponMetaPrefix + (result.issuedAt || "");
+      } else {
+        couponBox.style.display = "none";
+      }
+    }
+  </script>
+</body>
+</html>
